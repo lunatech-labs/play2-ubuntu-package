@@ -19,6 +19,10 @@ Import the following:
 
     import com.lunatech.play.ubuntupackage.UbuntuPackagePlugin._
 
+Then, add the `ubuntuPackageSettings` to your project:
+
+    settings(ubuntuPackageSettings:_*).settings( // your other settings
+
 Now, there are various TaskKeys you can set from `UbuntuPackageKeys`. Only one is required, `maintainer`:
 
     UbuntuPackageKeys.maintainer := "Erik Bakker <erik@lunatech.com>"

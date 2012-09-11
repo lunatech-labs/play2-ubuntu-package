@@ -1,7 +1,6 @@
 resolvers ++= Seq(
   "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases/",
-  Resolver.url("scalasbt", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns),
-  Resolver.file("ivy2-local", new File(Path.userHome.absolutePath + "/.ivy2/local"))(Resolver.ivyStylePatterns))
+  Resolver.url("scalasbt", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases"))(Resolver.ivyStylePatterns))
 
 addSbtPlugin("com.typesafe" % "sbt-native-packager" % "0.4.4")
 
@@ -17,7 +16,7 @@ name := "play2-ubuntu-package"
 
 organization := "com.lunatech"
 
-version := "0.1"
+version := "0.2-SNAPSHOT"
 
 description := "Play 2 plugin for building Ubuntu packages"
 

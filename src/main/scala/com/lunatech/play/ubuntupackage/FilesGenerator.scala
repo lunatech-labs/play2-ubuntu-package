@@ -50,5 +50,5 @@ object FilesGenerator {
        |
        |# Put your own overrides below this line
        |
-       |"""".stripMargin
+       |""".stripMargin
 }

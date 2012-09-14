@@ -1,16 +1,22 @@
 package com.lunatech.play.ubuntupackage
 
 object FilesGenerator {
-  
+
+  /*
+   * Default respawn limit is 10 times in 5 seconds. So if failing to start takes longer than 0.5 seconds
+   * it will never hit this limit. JVM startup time is probably that long. So we're taking a smaller number of 
+   * tries and longer timeout. 
+   */
   def upstartScript(config: ApplicationConfiguration) = 
     """|start on runlevel [2345]
        |stop on runlevel [016]
        |respawn
+       |respawn limit 3 60
        |console log
        |setuid %s
        |setgid %s
-       |env PLAY_OPTS=-Dhttp.port=%s
-       |exec %s $PLAY_OPTS""".stripMargin.format(config.user, config.group, config.port, config.dir + "/start")
+       |env PLAY_OPTS="-Dhttp.port=%s -Dconfig.file=/etc/%s/custom.conf"
+       |exec %s $PLAY_OPTS""".stripMargin.format(config.user, config.group, config.port, config.name, config.dir + "/start")
 
   def preInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
@@ -18,7 +24,7 @@ object FilesGenerator {
        |set -e
        |addgroup --system %s
        |adduser --system --no-create-home --disabled-password --shell /bin/false %s""".stripMargin.format(config.group, config.user))
-      
+
   /*
    * Setting ownership on a directory doesn't work with Native Packager Plugin 0.4.4, so we do it 
    * in the postinst scrip.
@@ -27,7 +33,7 @@ object FilesGenerator {
     """|#!/bin/sh
        |chown %s %s
        |service %s start""".stripMargin.format(config.user, config.dir, config.name))
-  
+
   def preRemoval(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
        |service %s stop || true""".stripMargin.format(config.name))
@@ -38,4 +44,9 @@ object FilesGenerator {
    */
   def postRemoval(config: ApplicationConfiguration) = None
 
+  def configFile(config: ApplicationConfiguration) = 
+    """|# Include the base configuration from the application's classpath
+       |include "application
+       |
+       |# Put your own overrides below this line"""".stripMargin
 }

@@ -30,3 +30,16 @@ Now, there are various TaskKeys you can set from `UbuntuPackageKeys`. Only one i
     UbuntuPackageKeys.maintainer := "Erik Bakker <erik@lunatech.com>"
 
 To build the package use the `deb` task.
+
+Developing
+----------
+
+If you want to work on this plugin, check it out somewhere and include it in the build of the project you're trying to build. This means, create in your app file `project/project/Build.scala` with the following contents:
+
+    import sbt._
+    object PluginDef extends Build {
+      override lazy val projects = Seq(root)
+      lazy val root = Project("plugins", file(".")) dependsOn(webPlugin)
+      lazy val webPlugin = file("/Users/eamelink/projects/play2-ubuntu-package")
+    }
+

@@ -48,5 +48,7 @@ object FilesGenerator {
     """|# Include the base configuration from the application's classpath
        |include "application
        |
-       |# Put your own overrides below this line"""".stripMargin
+       |# Put your own overrides below this line
+       |
+       |"""".stripMargin
 }

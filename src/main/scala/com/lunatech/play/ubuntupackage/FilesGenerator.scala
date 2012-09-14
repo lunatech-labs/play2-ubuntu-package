@@ -27,11 +27,15 @@ object FilesGenerator {
 
   /*
    * Setting ownership on a directory doesn't work with Native Packager Plugin 0.4.4, so we do it 
-   * in the postinst scrip.
+   * in the postinst script.
+   * 
+   * service restart gives an error if the package is not running (new install) and service start
+   * gives and error if the service is running (upgrade). So we stop first, and then restart.
    */
   def postInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
        |chown %s %s
+       |service %s stop
        |service %s start""".stripMargin.format(config.user, config.dir, config.name))
 
   def preRemoval(config: ApplicationConfiguration) = Some(

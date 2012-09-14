@@ -74,12 +74,12 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
 
     deb <<= packageBin in Debian,
     
-    upstartConfig <<= (target in Debian, applicationConfiguration) map { (dir, config) =>
+    upstartConfig <<= (target, applicationConfiguration) map { (dir, config) =>
       val file = dir / "%s.upstart".format(config.name)
       IO.write(file, FilesGenerator.upstartScript(config))
       file
     },
-    configFile <<= (target in Debian, applicationConfiguration) map { (dir, config) =>
+    configFile <<= (target, applicationConfiguration) map { (dir, config) =>
       val file = dir / "custom.conf"
       IO.write(file, FilesGenerator.configFile(config))
       file

@@ -46,7 +46,7 @@ object FilesGenerator {
 
   def configFile(config: ApplicationConfiguration) = 
     """|# Include the base configuration from the application's classpath
-       |include "application
+       |include "application"
        |
        |# Put your own overrides below this line
        |

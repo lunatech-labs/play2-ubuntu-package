@@ -16,7 +16,7 @@ name := "play2-ubuntu-package"
 
 organization := "com.lunatech"
 
-version := "0.2"
+version := "0.3-SNAPSHOT"
 
 description := "Play 2 plugin for building Ubuntu packages"
 

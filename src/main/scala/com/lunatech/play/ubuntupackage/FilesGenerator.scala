@@ -35,7 +35,7 @@ object FilesGenerator {
   def postInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
        |chown %s %s
-       |service %s stop
+       |service %s stop || true
        |service %s start""".stripMargin.format(config.user, config.dir, config.name))
 
   def preRemoval(config: ApplicationConfiguration) = Some(

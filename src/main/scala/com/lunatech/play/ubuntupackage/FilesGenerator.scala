@@ -16,7 +16,7 @@ object FilesGenerator {
        |setuid %s
        |setgid %s
        |env PLAY_OPTS="-Dhttp.port=%s -Dconfig.file=/etc/%s/custom.conf"
-       |pre-start exec rm %s
+       |pre-start exec rm -f %s
        |exec %s $PLAY_OPTS""".stripMargin.format(config.user, config.group, config.port, config.name, config.dir + "/RUNNING_PID", config.dir + "/start")
 
   def preInstall(config: ApplicationConfiguration) = Some(

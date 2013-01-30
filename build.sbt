@@ -4,11 +4,7 @@ resolvers ++= Seq(
 
 addSbtPlugin("com.typesafe" % "sbt-native-packager" % "0.4.4")
 
-addSbtPlugin("play" % "sbt-plugin" % "2.0.3")
-
-scalaVersion := "2.9.1"
-
-sbtVersion := "0.11.3"
+addSbtPlugin("play" % "sbt-plugin" % "2.1-RC3")
 
 sbtPlugin := true
 
@@ -16,7 +12,7 @@ name := "play2-ubuntu-package"
 
 organization := "com.lunatech"
 
-version := "0.3"
+version := "0.4"
 
 description := "Play 2 plugin for building Ubuntu packages"
 

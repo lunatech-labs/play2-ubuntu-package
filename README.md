@@ -14,6 +14,12 @@ In your `project/plugins.sbt` file, add the following:
 
     addSbtPlugin("com.lunatech" % "play2-ubuntu-package" % "0.3")
 
+Versions
+--------
+
+* 0.3 is for Play 2.0.4
+* 0.4 is for Play 2.1-RC3
+
 Usage
 -----
 

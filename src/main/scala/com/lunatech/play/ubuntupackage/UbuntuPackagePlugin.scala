@@ -15,8 +15,8 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
     def port = SettingKey[Int]("ubuntu-default-port", "Default Port")
     def applicationConfiguration = TaskKey[ApplicationConfiguration]("ubuntu-application-configuration", "Application configuration")
     def maintainer = packager.Keys.maintainer
-    def forceUid = SettingKey[Option[Int]]("ubuntu-forced-uid", "Force a UID for the user")
-    def forceGid = SettingKey[Option[Int]]("ubuntu-forced-gid", "Force a GID for the group")
+    def adduserOptions = SettingKey[Seq[String]]("ubuntu-adduser-options", "Additional options for the 'adduser' command")
+    def addgroupOptions = SettingKey[Seq[String]]("ubuntu-addgroup-options", "Additional options for the 'addgroup' command")
 
     def deb = TaskKey[File]("deb", "Build the 'deb' package")
     // TODO: It's nicer to have these tasks just generate tuples of name/content/perms/user/group, and then make a sequence of them in a single task.
@@ -35,8 +35,8 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
     version in Debian <<= version,
     user <<= normalizedName,
     group <<= user,
-    forceUid := None,
-    forceGid := None,
+    adduserOptions := Seq("--system", "--no-create-home", "--disabled-password", "--disabled-login"),
+    addgroupOptions := Seq("--system"),
     port := 9000,
     DebianKeys.packageDescription <<= description,
     DebianKeys.packageSummary <<= description,
@@ -44,8 +44,8 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
 
     DebianKeys.debianPackageDependencies in Debian ++= Seq("java2-runtime", "upstart (>= 1.5)"),
 
-    applicationConfiguration <<= (name in Debian, user, group, installationDirectory, port, forceUid, forceGid) map {
-      (name, user, group, dir, port, forceUid, forceGid) => ApplicationConfiguration(name, user, group, dir, port, forceUid, forceGid)
+    applicationConfiguration <<= (name in Debian, user, group, installationDirectory, port, adduserOptions, addgroupOptions) map {
+      ApplicationConfiguration(_, _, _, _, _, _, _)
     },
 
     DebianKeys.linuxPackageMappings <++=

@@ -6,5 +6,5 @@ case class ApplicationConfiguration(
   group: String,
   dir: String,
   port: Int,
-  forceUid: Option[Int],
-  forceGid: Option[Int])
+  addUserOptions: Seq[String],
+  addGroupOptions: Seq[String])

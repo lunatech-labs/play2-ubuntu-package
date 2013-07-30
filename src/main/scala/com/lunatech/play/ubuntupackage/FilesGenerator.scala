@@ -21,12 +21,20 @@ object FilesGenerator {
 
   def preInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
+       |# Create the request user and group if they don't exist yet.
        |set -e
-       |addgroup --system %s %s
-       |adduser --system %s --no-create-home --disabled-password --shell /bin/false %s""".stripMargin.format(
-         config.forceGid map { "--gid " + _ } getOrElse "",
+       |if ! getent group|grep ^%s: >/dev/null 2>&1 ; then
+       |  addgroup %s %s
+       |fi
+       |if ! id -u %s >/dev/null 2>&1 ; then
+       |  adduser %s %s
+       |fi
+       |""".stripMargin.format(
          config.group,
-         config.forceUid map { "--uid " + _ } getOrElse "",
+         config.addGroupOptions mkString " ",
+         config.group,
+         config.user,
+         config.addUserOptions mkString " ",
          config.user))
 
   /*
@@ -39,12 +47,21 @@ object FilesGenerator {
   def postInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
        |chown %s %s
-       |service %s stop || true
-       |service %s start""".stripMargin.format(config.user, config.dir, config.name, config.name))
+       |
+       |if service %s status|grep running ; then
+       |  service %s restart
+       |else
+       |  service %s start
+       |fi
+       |""".stripMargin.format(config.user, config.dir, config.name, config.name, config.name))
 
   def preRemoval(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh
-       |service %s stop || true""".stripMargin.format(config.name))
+       |
+       |if service %s status|grep running ; then
+       |  service %s stop
+       |fi
+       |""".stripMargin.format(config.name, config.name))
 
   /*
    *  We don't know whether you created a user for this service, or used an existing

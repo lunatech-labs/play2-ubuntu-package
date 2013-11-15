@@ -17,7 +17,9 @@ object FilesGenerator {
        |setgid %s
        |env PLAY_OPTS="-Dhttp.port=%s -Dconfig.file=/etc/%s/custom.conf"
        |pre-start exec rm -f %s
-       |exec %s $PLAY_OPTS""".stripMargin.format(config.user, config.group, config.port, config.name, config.dir + "/RUNNING_PID", config.dir + "/start")
+       |exec %s $PLAY_OPTS""".stripMargin.format(config.user, config.group, config.port, config.name,
+      config.systemProperties.map { case (n, v) => "-D%s=%s".format(n, v)}.mkString,
+      config.dir + "/RUNNING_PID", config.dir + "/start")
 
   def preInstall(config: ApplicationConfiguration) = Some(
     """|#!/bin/sh

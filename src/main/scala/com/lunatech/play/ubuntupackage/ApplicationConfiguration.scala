@@ -7,4 +7,5 @@ case class ApplicationConfiguration(
   dir: String,
   port: Int,
   addUserOptions: Seq[String],
-  addGroupOptions: Seq[String])
+  addGroupOptions: Seq[String],
+  systemProperties: Map[String, String] = Map())

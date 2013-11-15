@@ -17,6 +17,7 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
     def maintainer = packager.Keys.maintainer
     def adduserOptions = SettingKey[Seq[String]]("ubuntu-adduser-options", "Additional options for the 'adduser' command")
     def addgroupOptions = SettingKey[Seq[String]]("ubuntu-addgroup-options", "Additional options for the 'addgroup' command")
+    def systemProperties = SettingKey[Map[String, String]]("ubuntu-system-properties", "Additional system properties to be set on startup")
 
     def deb = TaskKey[File]("deb", "Build the 'deb' package")
     // TODO: It's nicer to have these tasks just generate tuples of name/content/perms/user/group, and then make a sequence of them in a single task.
@@ -41,11 +42,12 @@ object UbuntuPackagePlugin extends Plugin with DebianPlugin {
     DebianKeys.packageDescription <<= description,
     DebianKeys.packageSummary <<= description,
     installationDirectory <<= (name in Debian) map ("/opt/" + _),
+    systemProperties := Map(),
 
     DebianKeys.debianPackageDependencies in Debian ++= Seq("java2-runtime", "upstart (>= 1.5)"),
 
-    applicationConfiguration <<= (name in Debian, user, group, installationDirectory, port, adduserOptions, addgroupOptions) map {
-      ApplicationConfiguration(_, _, _, _, _, _, _)
+    applicationConfiguration <<= (name in Debian, user, group, installationDirectory, port, adduserOptions, addgroupOptions, systemProperties) map {
+      ApplicationConfiguration(_, _, _, _, _, _, _, _)
     },
 
     DebianKeys.linuxPackageMappings <++=
